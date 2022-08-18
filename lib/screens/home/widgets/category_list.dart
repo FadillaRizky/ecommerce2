@@ -1,4 +1,5 @@
-import 'package:ecommerce2/screens/home/detail_produk.dart';
+import 'package:ecommerce2/screens/detail_produk/detail_produk.dart';
+import 'package:ecommerce2/screens/home/widgets/subcategory_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Api/category/ListCategoryResponse.dart';
@@ -24,12 +25,9 @@ class CategoryList extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DetailProduk(
-
-                  ),
-                ),
-              );
+                  MaterialPageRoute(
+                  builder: (context) => SubCategoryList()
+              ));
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10),

@@ -51,6 +51,18 @@ class Api {
       throw "Unable to show list product";
     }
   }
+  static Future<ListProductResponse> getDetailProduct(String,IdProduk) async{
+    var url = BASE_URL + "Product/select_product_by_id/$IdProduk";
+
+    // print(url);
+    var response = await http.get(Uri.parse(url));
+
+    if(response.statusCode == 200) {
+      return ListProductResponse.fromJson(jsonDecode(response.body));
+    }else{
+      throw "Unable to show detail product";
+    }
+  }
   static Future<ListCategoryResponse> getListCategory() async{
     var url = BASE_URL + "Category/select_category";
 

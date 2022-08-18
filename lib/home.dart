@@ -2,6 +2,7 @@ import 'package:ecommerce2/screens/about/about_screen.dart';
 import 'package:ecommerce2/screens/feed/feeds_screen.dart';
 import 'package:ecommerce2/screens/help/help_screen.dart';
 import 'package:ecommerce2/screens/home/home_screen.dart';
+import 'package:ecommerce2/screens/home/widgets/subcategory_list.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {

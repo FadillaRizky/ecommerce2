@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('something wrong : ${snapshot.error}  '),
                 );
               }
-              //jika tidak kedua nya maa muncul loading
+              //jika tidak kedua nya maka muncul loading
               return Center(
                 child: CircularProgressIndicator(),
               );

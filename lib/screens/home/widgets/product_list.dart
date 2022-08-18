@@ -1,10 +1,10 @@
 import 'package:ecommerce2/constants.dart';
-import 'package:ecommerce2/screens/home/detail_produk.dart';
+import 'package:ecommerce2/screens/detail_produk/detail_produk.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Api/product/ListProductResponse.dart';
 
-class NewProductList extends StatelessWidget {
+class NewProductList extends StatefulWidget {
   // final List<Data> data;
   final List<Data> listProduct;
 
@@ -14,18 +14,24 @@ class NewProductList extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<NewProductList> createState() => _NewProductListState();
+}
+
+class _NewProductListState extends State<NewProductList> {
+  List<Data> result = [];
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: listProduct.length,
+        itemCount: widget.listProduct.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => DetailProduk(
+                  builder: (context) => DetailProduk(idProduk: result[index].idProduct!,
                   ),
                 ),
               );
@@ -35,7 +41,7 @@ class NewProductList extends StatelessWidget {
               child: Column(
                 children: [
                   Image.network(
-                    listProduct[index].imageProduct!,
+                    widget.listProduct[index].imageProduct!,
                     fit: BoxFit.fill,
                     height: 100,
                     width: 200,
@@ -46,10 +52,10 @@ class NewProductList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          listProduct[index].nameProduct!,
+                          widget.listProduct[index].nameProduct!,
                           style: Constants.judulproduct,overflow: TextOverflow.ellipsis,maxLines: 1,
                         ),
-                        Text('Rp ' + listProduct[index].priceProduct!,style: Constants.price,),
+                        Text('Rp ' + widget.listProduct[index].priceProduct!,style: Constants.price,),
                       ],
                     ),
                   ),

@@ -5,7 +5,7 @@ class Constants {
       fontSize: 20
   );
   static TextStyle judul2 = GoogleFonts.openSans(
-      fontSize: 20,fontWeight:FontWeight.bold,color: Colors.white
+      fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black
   );
   static TextStyle judulproduct = GoogleFonts.openSans(
       fontSize: 15,color: Colors.black,
