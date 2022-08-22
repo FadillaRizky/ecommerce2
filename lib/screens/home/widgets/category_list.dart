@@ -1,5 +1,5 @@
 import 'package:ecommerce2/screens/detail_produk/detail_produk.dart';
-import 'package:ecommerce2/screens/home/widgets/subcategory_list.dart';
+import 'package:ecommerce2/screens/subcategory/subcategory_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Api/category/ListCategoryResponse.dart';
@@ -17,7 +17,7 @@ class CategoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: 150,
+      height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: listCategory.length,
@@ -38,7 +38,7 @@ class CategoryList extends StatelessWidget {
                     child: Image.network(
                       listCategory[index].imageCategory!,
                       height: 150,
-                      width: 220,
+                      width: 170,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -51,7 +51,7 @@ class CategoryList extends StatelessWidget {
                       child: Center(
                         child: Text(
                           listCategory[index].nameCategory!,
-                          style: Constants.judul2,
+                          style: Constants.judulcategory,
                         ),
                       ),
                       decoration: BoxDecoration(

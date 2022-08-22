@@ -18,7 +18,6 @@ class NewProductList extends StatefulWidget {
 }
 
 class _NewProductListState extends State<NewProductList> {
-  List<Data> result = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +30,7 @@ class _NewProductListState extends State<NewProductList> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => DetailProduk(idProduk: result[index].idProduct!,
+                  builder: (context) => DetailProduk(idProduk: widget.listProduct[index].idProduct!,
                   ),
                 ),
               );

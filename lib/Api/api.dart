@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:ecommerce2/Api/product/DetailProductResponse.dart';
 import 'package:ecommerce2/Api/product/ListProductResponse.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,14 +52,14 @@ class Api {
       throw "Unable to show list product";
     }
   }
-  static Future<ListProductResponse> getDetailProduct(String,IdProduk) async{
+  static Future<DetailProductResponse> getDetailProduct(String IdProduk) async{
     var url = BASE_URL + "Product/select_product_by_id/$IdProduk";
 
     // print(url);
     var response = await http.get(Uri.parse(url));
 
     if(response.statusCode == 200) {
-      return ListProductResponse.fromJson(jsonDecode(response.body));
+      return DetailProductResponse.fromJson(jsonDecode(response.body));
     }else{
       throw "Unable to show detail product";
     }

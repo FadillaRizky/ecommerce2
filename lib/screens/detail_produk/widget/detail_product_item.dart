@@ -1,14 +1,23 @@
+import 'package:ecommerce2/utils/currency.dart';
 import 'package:flutter/material.dart';
 
 class DetailProductItem extends StatelessWidget {
+  final String nameProduct, nameCategory, descProduct, stockProduct;
+  final int priceProduct;
+
   const DetailProductItem({
     Key? key,
+    required this.nameProduct,
+    required this.nameCategory,
+    required this.descProduct,
+    required this.stockProduct,
+    required this.priceProduct,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15,vertical: 20),
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -16,20 +25,19 @@ class DetailProductItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("TV LED 14 inch"),
+                Text(nameCategory),
                 SizedBox(
                   height: 5,
                 ),
                 Text(
-                  "Sharp Aquos 14 inch",
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.w600),
+                  nameProduct,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   height: 5,
                 ),
                 Text(
-                  "14 Stock Available",
+                  "$stockProduct Stock Available",
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -44,9 +52,8 @@ class DetailProductItem extends StatelessWidget {
               children: [
                 Text("Price"),
                 Text(
-                  "Rp 4.000.000",
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.w600),
+                  Currency.rupiah.format(priceProduct),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

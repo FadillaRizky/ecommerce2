@@ -13,6 +13,12 @@ class Constants {
   static TextStyle price = GoogleFonts.openSans(
       fontSize: 15,color: Colors.black
   );
+  static TextStyle judulcategory = GoogleFonts.openSans(
+      fontSize: 20,color: Colors.white,fontWeight:FontWeight.bold
+  );
+  static TextStyle judulsubcategory = GoogleFonts.alegreya(
+    fontSize: 18,fontWeight: FontWeight.bold,color: Colors.grey
+  );
   // static TextStyle titlefeeds = GoogleFonts.arsenal(
   //   fontSize:
   // )
