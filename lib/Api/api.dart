@@ -15,7 +15,9 @@ import 'feed/ListFeedsResponse.dart';
 const BASE_URL = "http://192.168.18.18/ecom_smaaveros/index.php/Api/";
 
 class Api {
-  // CATEGORY
+
+  static const IMG_URL = 'http://192.168.18.18/ecom_smaaveros/image/';
+
   static Future<ListCarouselResponse> getListCarousel() async{
     var url = BASE_URL + "Carousel/select_carousel";
 

@@ -26,7 +26,7 @@ class CategoryList extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(
-                  builder: (context) => SubCategoryList()
+                  builder: (context) => SubCategoryList(id: listCategory[index].idCategory!,)
               ));
             },
             child: Container(

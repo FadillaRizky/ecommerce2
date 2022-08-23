@@ -1,12 +1,14 @@
+import 'package:ecommerce2/Api/api.dart';
 import 'package:ecommerce2/screens/detail_subcategory/detail_subcategory.dart';
 import 'package:flutter/material.dart';
-
+import 'widget/widgets.dart';
 import '../../Api/category/ListSubcategoryResponse.dart';
 import '../../constants.dart';
 
 class SubCategoryList extends StatefulWidget {
+  final String id;
   const SubCategoryList({
-    Key? key,
+    Key? key, required this.id,
   }) : super(key: key);
 
   @override
@@ -14,6 +16,14 @@ class SubCategoryList extends StatefulWidget {
 }
 
 class _SubCategoryListState extends State<SubCategoryList> {
+  Future<ListSubcategoryResponse>? listSubcategory;
+
+  @override
+  void initState() {
+    listSubcategory = Api.getListSubcategory(widget.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,81 +36,21 @@ class _SubCategoryListState extends State<SubCategoryList> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Expanded(
-          child: GridView.builder(
-            itemCount: 3,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10),
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => DetailSubCategory()));
-                },
-                child: Container(
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image.network(
-                          'https://1.bp.blogspot.com/-8vIBeAloFmo/X5r-ZLgo7fI/AAAAAAAAEhg/cYjOMVm5ZW4oeYIjm3kRKyNxfZyKAs9EQCNcBGAsYHQ/w0/Electronic-Axial-Lead-Resistors-Array%2B%2528FILEminimizer%2529.jpg',
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              'Resistor 1/4 watt',
-                              style: Constants.judulcategory,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0x66505050),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Stack(
-                //   children: [
-                //     Image.network(
-                //       'https://1.bp.blogspot.com/-8vIBeAloFmo/X5r-ZLgo7fI/AAAAAAAAEhg/cYjOMVm5ZW4oeYIjm3kRKyNxfZyKAs9EQCNcBGAsYHQ/w0/Electronic-Axial-Lead-Resistors-Array%2B%2528FILEminimizer%2529.jpg',
-                //       fit: BoxFit.fill,
-                //     ),
-                //     Positioned(
-                //       top: 0,
-                //       left: 0,
-                //       bottom: 0,
-                //       right: 0,
-                //       child: Container(
-                //         child: Center(
-                //           child: Text(
-                //             'Resistor 1/4 watt',
-                //             style: Constants.judulcategory,
-                //           ),
-                //         ),
-                //         decoration: BoxDecoration(
-                //           borderRadius: BorderRadius.circular(15),
-                //           color: Color(0x66505050),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+      body: FutureBuilder(
+          future: listSubcategory,
+          builder: (context, AsyncSnapshot<ListSubcategoryResponse> snapshot) {
+            if (snapshot.hasData) {
+              return ListSubcategory(listSubcategory: snapshot.data!.data!);
+            }
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('something wrong\n${snapshot.error}'),
               );
-            },
-          ),
-        ),
-      ),
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add your onPressed code here!

@@ -1,10 +1,10 @@
-/// data : {"id_product":"1251","name_product":"resistor 330 1/4 watt","desc_product":"-","stock_product":"100","price_product":"600","image_product":"prdct1655830851.png","id_category":"20","id_subcategory":"1582","name_category":"Resistor","desc_category":"Resistor Tetap","image_category":"ctgry1655780107.png"}
+/// data : [{"id_product":"1238","name_product":"Resistor 220 , 1/4 watt ","desc_product":"-","stock_product":"100","price_product":"500","image_product":"prdct1655780228.png","id_category":"20","id_subcategory":"1576","name_category":"Resistor","desc_category":"Resistor Tetap","image_category":"ctgry1655780107.png"},{"id_product":"1239","name_product":"Resistor 10K , 1/4 watt","desc_product":"-","stock_product":"100","price_product":"500","image_product":"prdct1655780492.png","id_category":"20","id_subcategory":"1576","name_category":"Resistor","desc_category":"Resistor Tetap","image_category":"ctgry1655780107.png"},{"id_product":"1247","name_product":"Resitor 1K , 1/4 watt","desc_product":"-","stock_product":"100","price_product":"500","image_product":"prdct1655829842.png","id_category":"20","id_subcategory":"1576","name_category":"Resistor","desc_category":"Resistor Tetap","image_category":"ctgry1655780107.png"}]
 /// status : 200
 /// response : "Data ada"
 
 class DetailSubcategoryResponse {
   DetailSubcategoryResponse({
-      Data? data, 
+      List<Data>? data, 
       int? status, 
       String? response,}){
     _data = data;
@@ -13,28 +13,33 @@ class DetailSubcategoryResponse {
 }
 
   DetailSubcategoryResponse.fromJson(dynamic json) {
-    _data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      _data = [];
+      json['data'].forEach((v) {
+        _data?.add(Data.fromJson(v));
+      });
+    }
     _status = json['status'];
     _response = json['response'];
   }
-  Data? _data;
+  List<Data>? _data;
   int? _status;
   String? _response;
-DetailSubcategoryResponse copyWith({  Data? data,
+DetailSubcategoryResponse copyWith({  List<Data>? data,
   int? status,
   String? response,
 }) => DetailSubcategoryResponse(  data: data ?? _data,
   status: status ?? _status,
   response: response ?? _response,
 );
-  Data? get data => _data;
+  List<Data>? get data => _data;
   int? get status => _status;
   String? get response => _response;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     if (_data != null) {
-      map['data'] = _data?.toJson();
+      map['data'] = _data?.map((v) => v.toJson()).toList();
     }
     map['status'] = _status;
     map['response'] = _response;
@@ -43,14 +48,14 @@ DetailSubcategoryResponse copyWith({  Data? data,
 
 }
 
-/// id_product : "1251"
-/// name_product : "resistor 330 1/4 watt"
+/// id_product : "1238"
+/// name_product : "Resistor 220 , 1/4 watt "
 /// desc_product : "-"
 /// stock_product : "100"
-/// price_product : "600"
-/// image_product : "prdct1655830851.png"
+/// price_product : "500"
+/// image_product : "prdct1655780228.png"
 /// id_category : "20"
-/// id_subcategory : "1582"
+/// id_subcategory : "1576"
 /// name_category : "Resistor"
 /// desc_category : "Resistor Tetap"
 /// image_category : "ctgry1655780107.png"
