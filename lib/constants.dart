@@ -19,6 +19,15 @@ class Constants {
   static TextStyle judulsubcategory = GoogleFonts.alegreya(
     fontSize: 18,fontWeight: FontWeight.bold,color: Colors.grey
   );
+  static TextStyle createaccount = GoogleFonts.openSans(
+      fontSize: 30,fontWeight: FontWeight.bold,color: Colors.black54
+  );
+  static TextStyle signuptocontinue = GoogleFonts.openSans(
+      fontSize: 21,fontWeight: FontWeight.bold,color: Colors.black54
+  );
+  static TextStyle hinttext = GoogleFonts.openSans(
+      fontSize: 20,color: Colors.black54
+  );
   // static TextStyle titlefeeds = GoogleFonts.arsenal(
   //   fontSize:
   // )

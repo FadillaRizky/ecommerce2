@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:ecommerce2/Api/auth/RegisterResponse.dart';
 import 'package:ecommerce2/Api/product/DetailProductResponse.dart';
 import 'package:ecommerce2/Api/product/ListProductResponse.dart';
 import 'package:http/http.dart' as http;
@@ -100,5 +101,16 @@ class Api {
       return DetailSubcategoryResponse.fromJson(jsonDecode(response.body));
     } else {
       throw "Unable to show list product";
+    }
+  }
+  static Future<RegisterResponse> submitRegister(Map<String,String>dataUser) async {
+    var url = BASE_URL + "Auth/register";
+
+    var response = await http.post(Uri.parse(url),body: dataUser);
+
+    if (response.statusCode == 200) {
+      return RegisterResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw "Unable to submit Register";
     }
   }}

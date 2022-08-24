@@ -25,16 +25,23 @@ class ListDetailSubcategory extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).push(
+                  MaterialPageRoute(
                     builder: (context) => DetailProduk(
-                          idProduk: listDetailSubcategory[index].idProduct!,
-                        )));
+                      idProduk: listDetailSubcategory[index].idProduct!,
+                    ),
+                  ),
+                );
               },
               child: Container(
+                height: 170,
+                width: 170,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ClipRRect(
+                    Container(
+                      height: 150,
+                      width: 150,
                       child: Image.network(
                         Api.IMG_URL +
                             listDetailSubcategory[index].imageProduct!,

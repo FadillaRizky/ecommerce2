@@ -1,11 +1,18 @@
+
+
+import 'dart:io';
+
+import 'package:ecommerce2/utils/currency.dart';
 import 'package:flutter/material.dart';
 
 import '../../cart/cart.dart';
 
 class Footer extends StatefulWidget {
-
+final int totalPrice ,quantity;
+final bool editCart ;
+final String idProduct;
   const Footer(
-      {Key? key,})
+      {Key? key, required this.totalPrice, required this.quantity, this.editCart = false, required this.idProduct,})
       : super(key: key);
 
   @override
@@ -16,7 +23,7 @@ class _FooterState extends State<Footer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.fromLTRB(20, 10, 20, (Platform.isIOS) ? 20 : 10),
       decoration: BoxDecoration(color: Colors.white, boxShadow: [
         BoxShadow(color: Colors.grey, spreadRadius: 0.1, blurRadius: 5)
       ]),
@@ -36,7 +43,7 @@ class _FooterState extends State<Footer> {
                 ),
               ),
               Text(
-                "Rp 2.000.000",
+                Currency.rupiah.format(widget.totalPrice),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,

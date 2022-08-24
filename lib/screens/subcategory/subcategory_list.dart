@@ -36,21 +36,25 @@ class _SubCategoryListState extends State<SubCategoryList> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: FutureBuilder(
-          future: listSubcategory,
-          builder: (context, AsyncSnapshot<ListSubcategoryResponse> snapshot) {
-            if (snapshot.hasData) {
-              return ListSubcategory(listSubcategory: snapshot.data!.data!);
-            }
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('something wrong\n${snapshot.error}'),
-              );
-            }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
+      body: Column(
+        children: [
+          FutureBuilder(
+              future: listSubcategory,
+              builder: (context, AsyncSnapshot<ListSubcategoryResponse> snapshot) {
+                if (snapshot.hasData) {
+                  return ListSubcategory(listSubcategory: snapshot.data!.data!);
+                }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('something wrong\n${snapshot.error}'),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add your onPressed code here!

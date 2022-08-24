@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecommerce2/screens/about/about_screen.dart';
 import 'package:ecommerce2/screens/feed/feeds_screen.dart';
 import 'package:ecommerce2/screens/help/help_screen.dart';
@@ -26,6 +28,7 @@ class Home extends StatelessWidget {
         ),
         bottomNavigationBar: Container(
           color: Colors.white,
+          padding: (Platform.isIOS) ? EdgeInsets.only(bottom: 20) : null,
           child: TabBar(
               labelColor: Colors.orange,
               unselectedLabelColor: Colors.black45,

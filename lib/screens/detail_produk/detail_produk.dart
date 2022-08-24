@@ -32,7 +32,7 @@ class _DetailProdukState extends State<DetailProduk> {
       imageProduct = " ",
       stockProduct = " ";
 
-  int priceProduct = 0, totalPrice = 0, itemCount = 1;
+  int priceProduct = 0, totalPrice = 0, quantity = 1;
 
   bool stopRefreshing = false;
 
@@ -43,7 +43,15 @@ class _DetailProdukState extends State<DetailProduk> {
         children: [
           // kurangi jumlah barang
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                if (quantity <= 1) {
+                  return;
+                }
+                quantity--;
+                totalPrice = priceProduct * quantity;
+              });
+            },
             style: ElevatedButton.styleFrom(
                 shape: CircleBorder(), primary: Colors.grey[200]),
             child: Icon(
@@ -54,12 +62,22 @@ class _DetailProdukState extends State<DetailProduk> {
 
           // untuk menampilkan berapa jumlah barang
           Text(
-            "1",
+            quantity.toString(),
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           // tambahkan jumla barang
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              if (quantity == int.parse(stockProduct)) {
+                return;
+
+              }
+              setState(() {
+
+                quantity++;
+                totalPrice = priceProduct * quantity;
+              });
+            },
             style: ElevatedButton.styleFrom(
                 shape: CircleBorder(), primary: Colors.green[400]),
             child: Icon(
@@ -73,9 +91,10 @@ class _DetailProdukState extends State<DetailProduk> {
     );
   }
 
-  checkCartUser(){
+  checkCartUser() {
     isCartAvailable = false;
   }
+
   @override
   void initState() {
     //request api detail produk
@@ -89,7 +108,7 @@ class _DetailProdukState extends State<DetailProduk> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: loadingData(),
-      bottomNavigationBar: Footer(),
+      bottomNavigationBar: Footer(totalPrice: totalPrice, quantity: quantity, idProduct: idProduct,),
     );
   }
 
@@ -167,12 +186,19 @@ class _DetailProdukState extends State<DetailProduk> {
             SizedBox(
               height: 3,
             ),
-            DetailProductItem(priceProduct: priceProduct, descProduct: descProduct, stockProduct: stockProduct, nameCategory: nameCategory,  nameProduct: nameProduct,),
+            DetailProductItem(
+              priceProduct: priceProduct,
+              descProduct: descProduct,
+              stockProduct: stockProduct,
+              nameCategory: nameCategory,
+              nameProduct: nameProduct,
+            ),
             SizedBox(
               height: 10,
             ),
-            Description(desc: descProduct, nameProduct: nameProduct,
-
+            Description(
+              desc: descProduct,
+              nameProduct: nameProduct,
             ),
             //add & remove item
             setQuantity(),
