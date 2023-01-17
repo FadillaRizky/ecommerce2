@@ -48,14 +48,17 @@ class _RegisterState extends State<Register> {
           context);
       return;
     }
+    var data = {
+    "email": email,
+    "username": username,
+    "password": password,
+    };
 
-    Api.submitRegister({
-      "email": email,
-      "username": username,
-      "password": password,
-    }).then((value) {
+
+    Api.submitRegister(data).then((value) {
       //jika register berhasil maka muncul pesan berhasil
       Alerts.showMessage(value.message!, context);
+      Navigator.of(context).pop();
     }).catchError((error) {
       //jika register gagal,maka muncul pesan error
       Alerts.showMessage(error, context);

@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce2/Api/carousel/ListCarouselResponse.dart';
 import 'package:ecommerce2/constants.dart';
 import 'package:ecommerce2/screens/home/widgets/home_widgets.dart';
+import 'package:ecommerce2/utils/login_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,6 +13,7 @@ import '../../Api/category/ListCategoryResponse.dart';
 import '../../Api/product/ListProductResponse.dart';
 import '../auth/Login.dart';
 import '../auth/Register.dart';
+import '../profile/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,6 +26,36 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<ListCategoryResponse> dataCategory = Api.getListCategory();
   Future<ListProductResponse> dataProduct = Api.getListProduct();
   Future<ListCarouselResponse> dataCarousel = Api.getListCarousel();
+  bool userLoggedin = false;
+
+  PopupMenuItem loginOrProfile() {
+    if (userLoggedin) {
+      //jika user sudah login maka tampilkan tombol profile pada menuList
+      return PopupMenuItem(
+        value: 'btnProfile',
+        child: Text('Profile'),
+      );
+    }
+    //jika tidak,maka muncul tombol login
+    return PopupMenuItem(
+      value: 'btnLogin',
+      child: Text('Login'),
+    );
+  }
+
+  checkUser() {
+    LoginPref.checkPref().then((value) {
+      setState(() {
+        userLoggedin = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    checkUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,37 +64,45 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.orange,
-        title: Text('Toko Lauwba'),
+        title: Text('E-commerce'),
         actions: [
           Icon(Icons.shopping_cart),
           PopupMenuButton(
             icon: Icon(
               Icons.more_vert,
               color: Colors.white,
-
             ),
             itemBuilder: (_) => [
+              loginOrProfile(),
               PopupMenuItem(
-                  value: 'btnLogin',
-                  child: Text('Login')),
-              PopupMenuItem(
-                  value: 'btnExit',
-                  child: Text('Exit'))
+                value: 'btnExit',
+                child: Text('Exit'),
+              ),
             ],
-            onSelected: (item){
-              switch(item) {
+            onSelected: (item) {
+              switch (item) {
+                case 'btnProfile':
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => Profile()))
+                      .then((_) {
+                    checkUser();
+                  });
+                  break;
                 case 'btnLogin':
-                //lakukan sesuatu setelah user menekan tombol login
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Login()));
+                  //lakukan sesuatu setelah user menekan tombol login
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => Login()))
+                      .then((_) {
+                    checkUser();
+                  });
                   break;
                 case 'btnExit':
-                //lakukan sesuatu setelah klik tombol exit
-                //keluar aplikasi
+                  //lakukan sesuatu setelah klik tombol exit
+                  //keluar aplikasi
                   exit(0);
                   break;
                 default:
               }
-
             },
           )
         ],

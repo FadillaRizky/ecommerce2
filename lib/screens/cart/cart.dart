@@ -1,5 +1,13 @@
+import 'package:ecommerce2/Api/api.dart';
+import 'package:ecommerce2/Api/cart/ListCartResponse.dart';
+import 'package:ecommerce2/screens/auth/Login.dart';
+import 'package:ecommerce2/utils/alerts.dart';
+import 'package:ecommerce2/utils/currency.dart';
+import 'package:ecommerce2/utils/data_user.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce2/screens/cart/widgets/widgets.dart';
+
+import '../../utils/login_pref.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -9,13 +17,55 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  //buat variable dengan data kosong,
+  //harus berupa data list cart yang berisi cart,product,qty,dll
+  List<Result>? dataListCart;
+  Future<ListCartResponse> listCart() async {
+    //mengambil nilai dari pref
+    DataUser value = await LoginPref.getPref();
+    //panggil list cart berdasarkan id user
+    return Api.getListCart(value.idUser!);
+  }
+
+  checkPrefBeforeCart() async {
+    LoginPref.checkPref().then((value) {
+      if (value != true) {
+        Alerts.showMessage("Login to continue", context);
+        //pushandremoveunti = menambahkan halaman baru pada tumpukan
+        //pushreplacement = menambahkan halaman baru dan tidak menghapus semuanya
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    checkPrefBeforeCart();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
-        child: showCart(),
-      ),
+          child: FutureBuilder(
+              future: listCart(),
+              builder: (context, AsyncSnapshot<ListCartResponse> snapshot) {
+                if (snapshot.hasData) {
+                  //isi data pada variable dataListCart
+                  dataListCart = snapshot.data!.result!;
+                  return showCart();
+                }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text("Something wrong\n${snapshot.error}"),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              })),
     );
   }
 
@@ -44,7 +94,7 @@ class _CartScreenState extends State<CartScreen> {
   // menampilkan list Cart
   Widget showList() {
     return ListView.builder(
-      itemCount: 2,
+      itemCount: dataListCart!.length,
       itemBuilder: (context, index) {
         //item cart
         return Container(
@@ -67,7 +117,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Row(
               children: [
                 Image.network(
-                  "https://images.tokopedia.net/img/cache/700/hDjmkQ/2020/12/11/b662d582-3313-4236-978c-f3c19957313b.jpg",
+                  dataListCart![index].imageProduct!,
                   width: 120,
                   height: double.infinity,
                   fit: BoxFit.cover,
@@ -86,7 +136,9 @@ class _CartScreenState extends State<CartScreen> {
                             // nama produk
                             Flexible(
                               child: Text(
-                                "Sharp Aquos 32 inch TV",
+                               dataListCart![index].nameProduct!,
+                                maxLines: 2,
+                                overflow:TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
@@ -106,7 +158,7 @@ class _CartScreenState extends State<CartScreen> {
 
                         // qty
                         Text(
-                          "Quantity : 2",
+                          "Quantity : ${dataListCart![index].quantity!}",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
@@ -114,7 +166,7 @@ class _CartScreenState extends State<CartScreen> {
 
                         // price label
                         Text(
-                          "Price : 4",
+                          "Price : ${dataListCart![index].priceProduct!}",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
@@ -134,7 +186,7 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               ),
                               Text(
-                                "Rp 4.000.000",
+                                Currency.rupiah.format((int.parse(dataListCart![index].priceProduct!) * int.parse(dataListCart![index].quantity!))) ,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,

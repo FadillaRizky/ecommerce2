@@ -1,3 +1,4 @@
+import 'package:ecommerce2/Api/cart/CheckCartResponse.dart';
 import 'package:ecommerce2/constants.dart';
 import 'package:ecommerce2/screens/detail_produk/widget/widgets.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import '../../Api/api.dart';
 import '../../Api/product/DetailProductResponse.dart';
 import '../../Api/product/ListProductResponse.dart';
+import '../../utils/alerts.dart';
+import '../../utils/login_pref.dart';
 
 class DetailProduk extends StatefulWidget {
   final String idProduk;
@@ -19,7 +22,6 @@ class DetailProduk extends StatefulWidget {
 
 class _DetailProdukState extends State<DetailProduk> {
   late Future<DetailProductResponse>? detailProduct;
-
   // late Future<CheckCartResponse> CheckCart;
   // late String idUser;
   bool? isCartAvailable;
@@ -69,11 +71,10 @@ class _DetailProdukState extends State<DetailProduk> {
           ElevatedButton(
             onPressed: () {
               if (quantity == int.parse(stockProduct)) {
+                Alerts.showMessage("can't add more quantity than an available stock ", context);
                 return;
-
               }
               setState(() {
-
                 quantity++;
                 totalPrice = priceProduct * quantity;
               });
@@ -91,8 +92,30 @@ class _DetailProdukState extends State<DetailProduk> {
     );
   }
 
-  checkCartUser() {
-    isCartAvailable = false;
+  checkCartUser() async {
+    var dataUser = await LoginPref.getPref();
+
+    //jika id user kosong, maka ubah status available menjadi false
+    //karna tidak bisa cek keranjang ktika tidak ada id user dari pref nya
+    if (dataUser.idUser == null) {
+      setState(() {
+        this.isCartAvailable = false;
+        quantity = 1;
+      });
+      return;
+    }
+    Future<CheckCartResponse> checkCart =
+        Api.checkCart(dataUser.idUser!, widget.idProduk);
+    checkCart.then((value) {
+      setState(() {
+        // jika hasil cek keranjang tidak benilai null alias tidak kosong,maka return nilai true
+        // memang null, maka return false
+        this.isCartAvailable = (value.result != null) ? true : false;
+        print("cart available : $isCartAvailable");
+        //update quantitynya berdasarkan pada jumlah product pada keranjang
+        quantity = int.parse(value.result?.quantity ?? "1");
+      });
+    });
   }
 
   @override
@@ -106,9 +129,17 @@ class _DetailProdukState extends State<DetailProduk> {
 
   @override
   Widget build(BuildContext context) {
+    // isi variable context dengan context yang berasal dari build
     return Scaffold(
       body: loadingData(),
-      bottomNavigationBar: Footer(totalPrice: totalPrice, quantity: quantity, idProduct: idProduct,),
+      bottomNavigationBar: Footer(
+        totalPrice: totalPrice,
+        quantity: quantity,
+        idProduct: idProduct,
+        // setelah tanda ?? digunakan ketika nilai pada iscartavailable adalah null/kosong
+        //jadi,jika kosong,tetapkan iscartavailable menjadi false
+        isCartAvailable: this.isCartAvailable ?? false,
+      ),
     );
   }
 

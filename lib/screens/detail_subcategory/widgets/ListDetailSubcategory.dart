@@ -27,9 +27,10 @@ class ListDetailSubcategory extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => DetailProduk(
-                      idProduk: listDetailSubcategory[index].idProduct!,
-                    ),
+                    builder: (context) =>
+                        DetailProduk(
+                          idProduk: listDetailSubcategory[index].idProduct!,
+                        ),
                   ),
                 );
               },

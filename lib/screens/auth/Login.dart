@@ -2,6 +2,7 @@ import 'package:ecommerce2/Api/api.dart';
 import 'package:ecommerce2/constants.dart';
 import 'package:ecommerce2/screens/auth/Register.dart';
 import 'package:ecommerce2/utils/alerts.dart';
+import 'package:ecommerce2/utils/login_pref.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -14,40 +15,53 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
-  TextEditingController controllerUsername = TextEditingController();
 
   bool invisible = true;
-  bool invisible2 = true;
 
-  register(BuildContext context) {
+  login(BuildContext context) {
     var email = controllerEmail.text;
     var password = controllerPassword.text;
-    var username = controllerUsername.text;
     //validasi
-    if (email == "") {
-      Alerts.showMessage("Please enter your email", context);
+    if (email.isEmpty) {
+      Alerts.showMessage("Please Enter your email", context);
       return;
     }
-    if (password == "") {
+    if (password.isEmpty) {
       Alerts.showMessage("Please enter your password", context);
       return;
     }
-    if (username == "") {
-      Alerts.showMessage("Please enter your username", context);
-      return;
-    }
 
-    Api.submitRegister({
+    //kelompokan data email dan password
+    var data = {
       "email": email,
-      "username": username,
       "password": password,
-    }).then((value) {
-      //jika register berhasil maka muncul pesan berhasil
-      Alerts.showMessage(value.message!, context);
-    }).catchError((error) {
-      //jika register gagal,maka muncul pesan error
-      Alerts.showMessage(error, context);
-    });
+    };
+
+    Api.submitLogin(data).then((value) async {
+        //ketika pesan nya bukan successful
+        if (value.message != "login user successful") {
+          //muncul error
+          Alerts.showMessage(value.message!, context);
+          return;
+        }
+        LoginPref.saveToSharedPref(
+          value.result!.idUser!,
+          value.result!.username!,
+        );
+
+        //cek apakah pref yang sudah di save, benar benar tersimpan?
+        if (await LoginPref.checkPref() == true) {
+          Alerts.showMessage("Login Success!", context);
+          //jika ya,maka kembali kehalaman semula
+          Navigator.of(context).pop();
+
+          //iduser dan username tampil di console
+          // LoginPref.getPref().then((value) {
+          //   print(value.idUser! + value.username!);
+          // });
+        }
+      },
+    );
   }
 
   @override
@@ -100,8 +114,8 @@ class _LoginState extends State<Login> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
+                      borderSide:
+                          BorderSide(width: 0, style: BorderStyle.none)),
                   filled: true,
                   fillColor: Colors.black12,
                   hintText: 'Password',
@@ -126,7 +140,7 @@ class _LoginState extends State<Login> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  register(context);
+                  login(context);
                 },
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.orange)),
